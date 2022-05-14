@@ -1,0 +1,53 @@
+
+body {
+    font-family: 'IBM Plex Sans', sans-serif;
+}
+nav {
+    margin: 20px 20px 100px 20px;
+}
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+  
+nav ul li {
+    float: left;
+}
+
+nav ul li a {
+    display: block;
+    color: rgb(55, 46, 46);
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+nav ul li > a:hover {
+    color:rgb(40, 39, 68);
+  }
+
+.contact:hover
+{
+    background-color: rgb(40, 39, 68);
+    color: #ffff;
+  }
+.contact {
+    appearance: none;
+    border: none;
+    height: 45px;
+    box-sizing: border-box;
+    background-color: rgb(23, 22, 52);
+    font-weight: 5;
+    color: white;
+    border-radius: 7px;
+    font-size: 12pt;
+    cursor: pointer;
+    padding: 12px 30px;
+    margin: 5px 10px;
+    text-align: center;
+    text-transform: uppercase;
+    box-shadow: rgb(18 17 43 / 65%) 0px 3px 8px -2px;
+    transition: background-color 200ms ease-out 0s;
+    outline: none;
+}
