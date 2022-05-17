@@ -14,6 +14,11 @@ var PostSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    category: 
+    {
+        type: String,
+        required: true,
+    },
     keywords: [{type: String}],
     location: String,
     audience: [{type: String}],
