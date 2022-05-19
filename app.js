@@ -1,4 +1,5 @@
 require("dotenv").config();
+import { generateCaption } from './utils/transformer/index';
 const express = require("express"),
   path = require('path');
   bodyParser = require("body-parser"),
@@ -40,6 +41,12 @@ app.get("/v1/:token", async (req, res, next) =>{
 
 app.post("/v1/:token", async (req, res, next) => {
 
+  const languageMapper = {
+    'Español': 'Spanish',
+    'Inglés': 'English',
+    'Portugués': 'Portuguese',
+  }
+
   var post = {language: req.body.language,
               companyName: req.body.name,
               keywords: req.body.keywords,
@@ -55,7 +62,7 @@ app.post("/v1/:token", async (req, res, next) => {
 
   console.log(post)
 
-  console.log(req.body)
+  console.log(generateCaption(post))
           
   // const post = new Post(req.body.post);
 
