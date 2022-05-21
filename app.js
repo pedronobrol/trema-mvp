@@ -1,7 +1,8 @@
 require("dotenv").config();
-import { generateCaption } from './utils/transformer/index';
+const generateCaption = require('./utils/transformer/index');
 const express = require("express"),
   path = require('path');
+const { connection } = require("mongoose");
   bodyParser = require("body-parser"),
   mongoose = require("mongoose"),
   Post = require("./models/post"),
@@ -33,6 +34,7 @@ app.get("/", async (req, res, next) =>{
 app.get("/v1/:token", async (req, res, next) =>{
   console.log(req.params.token)
   user = await User.findOne({ token: req.params.token });
+  console.log(user)
   if (!user) {
     return res.send("Error")
   }
@@ -47,11 +49,24 @@ app.post("/v1/:token", async (req, res, next) => {
     'Portugués': 'Portuguese',
   }
 
-  var post = {language: req.body.language,
+  const categoryMapper = {
+    'Restaurante': 'restaurant',
+    'Moda': 'fashion', 
+    'Tecnología': 'tech',
+    'Salud': 'health'
+  }
+
+
+  keywordsParse = JSON.parse(req.body.keywords);
+  keywords = []
+  for (e in keywordsParse){
+    keywords.push(keywordsParse[e].value)
+  }
+  var post = {language: languageMapper[req.body.language],
               companyName: req.body.name,
-              keywords: req.body.keywords,
+              keywords: keywords,
               location: req.body.location,
-              category: req.body.category,
+              category: categoryMapper[req.body.category],
               audience: req.body.audience,
               emoji: req.body.emoji,
               funny: req.body.funny,
@@ -59,11 +74,10 @@ app.post("/v1/:token", async (req, res, next) => {
               emoji:req.body.emoji,
               hashtag: req.body.hashtag
             }
-
-  console.log(post)
-
-  console.log(generateCaption(post))
-          
+  try{
+  message = await generateCaption(post)
+  message = message.data.choices[0].text
+  console.log(message)
   // const post = new Post(req.body.post);
 
   // //#TODO await post generation
@@ -73,7 +87,11 @@ app.post("/v1/:token", async (req, res, next) => {
   // req.flash('success', 'Post generado exitosamente.')
   // req.post = post;
   //res.redirect(`/v1/${req.body.params.token}`)
-  res.send("Este es el resultado generado por la máquina.")
+  res.send(message)
+
+  } catch(e){
+    return "Error"
+  }
 });
 
 app.get("/v1/:token/post", async function(req, res){

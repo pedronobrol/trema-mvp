@@ -1,20 +1,23 @@
-import { Configuration, OpenAIApi } from "openai";
-import * as dotenv from "dotenv";
+require("dotenv").config();
+const openAI = require("openai")
 
-dotenv.config();
-const configuration = new Configuration({
-    organization: "org-YGrtxJyj562CN8Dzx84pSwhg",
+const configuration = new openAI.Configuration({
     apiKey: process.env.OPENAI_API_KEY,
 });
-const openai = new OpenAIApi(configuration);
+const openai = new openAI.OpenAIApi(configuration);
 
-module.exports = function generateCaption(post) {
+module.exports = async function generateCaption(post) {
     var message = `Write a creative ad in ${post.language}` 
     if(post.category){
         message += ` for a ${post.category} company`
     }
-    if(post.name){
-        message += ` called ${post.name}`
+    if(post.companyName){
+        if(post.category){
+            message += ` called ${post.companyName}`
+        } else {
+            message += ` for a company called ${post.companyName}`
+        }
+        
     }
     if(post.audience){
         message += ` aimed at ${post.audience}`
@@ -23,7 +26,7 @@ module.exports = function generateCaption(post) {
         message += `. The business is located at ${post.location}`
     }
 
-    message += `. keywords ${post.Keywords}.`
+    message += `. keywords ${post.keywords}.`
 
     if(post.question){
         message += '. It should contain a question.'
@@ -38,7 +41,8 @@ module.exports = function generateCaption(post) {
         message += '. The ad must contain emojis.'
     }
 
-    return message;
+    console.log(message)
+    // return message;
     try {
         const completion = await openai.createCompletion("text-davinci-002", {
         prompt: message,
@@ -51,12 +55,12 @@ module.exports = function generateCaption(post) {
         {
             timeout: 10000
         });
-        console.log(completion.data);
         return completion;
       } catch (error) {
         if (error.response) {
           console.log(error.response.status);
           console.log(error.response.data);
+          return "Error. Pruebe nuevamente."
         } else {
           console.log(error.message);
           return "Error. Pruebe nuevamente."

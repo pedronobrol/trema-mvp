@@ -33,15 +33,19 @@
                     <label class="form-label" for="name">Nombre de la empresa (opcional) </label>
                     <input class="form-control" type="text" name="name" placeholder="Trema">
 
+                    <label class="form-label" for="category">Categoría </label>
+                    <select class="form-control" name="category">
+                      <option>Restaurante</option>
+                      <option>Moda</option>
+                      <option>Tecnología</option>
+                      <option>Salud</option>
+                    </select>
+
                     <label class="form-label" for="keywords">Añada las palabras clave </label>
-                    <input name='keywords' class='form-control' value='' placeholder="Barato, playa..."> 
+                    <input name='keywords' class='form-control' value='' placeholder="Barato, playa..." required> 
                     
                     <label class="form-label" for="location">Ubicación (opcional) </label>
-                    <input class="form-control" type="text" name="location" placeholder="Plaza de España, Madrid">
-                    
-                    <label class="form-label" for="category">Category (opcional) </label>
-                    <input class="form-control" type="text" name="category" placeholder="Restaurante">
-                    
+                    <input class="form-control" type="text" name="location" placeholder="Plaza de España, Madrid">                    
                     <label class="form-label" for="audience">Público objetivo (opcional) </label>
                     <input name='audience' class='form-control' value='' placeholder="Adultos, familias..."> 
                     <br>
@@ -71,10 +75,10 @@
                       </label>
                     </div>          
                     <br>
-                    <strong>Resultado:</strong> <textarea id="result" class="form-control"></textarea>      
-                  <div class="d-grid gap-2">
+                     <div class="d-grid gap-2">
                     <button id="buttonID" style="margin: 3% 30% 0 30%;" class="btn btn-primary" >Generar caption </button>
-                  </div>
+                    </div>
+                    <strong>Resultado:</strong> <textarea id="result" class="form-control"rows="10"></textarea>      
                 </form>
                
               </div>
@@ -111,7 +115,10 @@
  
                     // Print received data from server
                     console.log(this.responseText);
-                    result.innerHTML = this.responseText
+                    text = JSON.stringify(this.responseText)
+                    text = text.replace(/"/g, '').replace(/\\n/g, '')
+                    console.log(text)
+                    document.getElementById("result").value = text
                     document.getElementById("buttonID").innerHTML = "Generar caption"
                 }
             };
